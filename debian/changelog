@@ -1,0 +1,5 @@
+ligo-lalsuite (0+git20170502-1) experimental; urgency=medium
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Steffen Moeller <moeller@debian.org>  Tue, 02 May 2017 23:11:51 +0200

@@ -1,0 +1,36 @@
+Source: ligo-lalsuite
+Section: science
+Priority: optional
+Maintainer: debian-astro-maintainers@lists.alioth.debian.org
+Uploaders: Steffen Moeller <moeller@debian.org>, Christian Dreihsig <christian.dreihsig@t-online.de>
+Build-Depends: debhelper (>= 9), libgsl-dev, libfftw3-dev, libframe-dev, pkg-config, libxml2-dev, libglib2.0-dev, libhdf5-dev
+Standards-Version: 3.9.8
+Homepage: https://wiki.ligo.org/DASWG/LALSuite
+Vcs-Git: https://github.com/VolunteerComputingHelp/ligo-lalsuite
+Vcs-Browser: https://github.com/VolunteerComputingHelp/ligo-lalsuite.git
+
+Package: lalsuite
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: LSC Algorithm Library Suite
+ The LSC Algorithm Library Suite (LALSuite) is comprised of various
+ gravitational wave data analysis routines written in C.
+ The LALSuite is comprised of the following components:
+ .
+  * LAL: Core gravitational wave analysis routines
+  * LALFrame: LAL wrapping of the LIGO/Virgo Frame library
+  * LALMetaIO: LAL wrapping of the MetaIO LIGO_LW XML library
+  * LALXML: LAL wrapping of the libxml2 XML library, currently unused
+  * LALSimulation: LAL routines for gravitational waveform and noise
+    generation
+  * LALBurst: LAL routines for burst gravitational wave data analysis
+  * LALDetChar: LAL routines for detector characterisation
+  * LALInspiral: LAL routines for inspiral and ringdown CBC gravitational
+    wave data analysis
+  * LALPulsar: LAL routines for pulsar and continuous wave gravitational
+    wave data analysis
+  * LALInference: LAL routines for Bayesian inference data analysis
+  * LALStochastic: LAL routines for stochastic background gravitational
+    wave data analysis
+  * LALApps: Collection of gravitational wave data analysis codes and
+    pipelines utilising the LAL libraries
