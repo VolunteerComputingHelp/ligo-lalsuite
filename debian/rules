@@ -16,9 +16,13 @@
 
 
 # dh_make generated override targets
-# This is example for Cmake (See https://bugs.debian.org/641051 )
-#override_dh_auto_configure:
-#	dh_auto_configure -- #	-DCMAKE_LIBRARY_PATH=$(DEB_HOST_MULTIARCH)
+override_dh_auto_configure:
+	#dh_auto_configure -- --enable-frame=no --enable-metaio=no --enable-mpi=no --disable-shared --enable-boinc  --disable-silent-rules #${eah_configure_args} 
+	dh_auto_configure -- --enable-boinc 
+
+override_dh_auto_build:
+	dh_auto_build
+	cd lalapps/src/pulsar/HoughFstat && make
 
 
 dh_override_dh_auto_clean:

@@ -3,5 +3,9 @@ lalsuite for Debian
 
 Do not use this package for production.
 
+The LALsuite offers an array of Debian packages already. Because of
+separate versioning, upstream handles their packaging independencly.
+This meta-package is only a very first approach towards towards it all.
+
  -- Steffen Moeller <moeller@debian.org>  Tue, 02 May 2017 23:11:51 +0200
 

@@ -3,7 +3,7 @@ Section: science
 Priority: optional
 Maintainer: debian-astro-maintainers@lists.alioth.debian.org
 Uploaders: Steffen Moeller <moeller@debian.org>, Christian Dreihsig <christian.dreihsig@t-online.de>
-Build-Depends: debhelper (>= 9), libgsl-dev, libfftw3-dev, libframe-dev, pkg-config, libxml2-dev, libglib2.0-dev, libhdf5-dev
+Build-Depends: debhelper (>= 9), libgsl-dev, libfftw3-dev, libframe-dev, pkg-config, libxml2-dev, libglib2.0-dev, libhdf5-dev, libboinc-app-dev
 Standards-Version: 3.9.8
 Homepage: https://wiki.ligo.org/DASWG/LALSuite
 Vcs-Git: https://github.com/VolunteerComputingHelp/ligo-lalsuite
@@ -34,3 +34,12 @@ Description: LSC Algorithm Library Suite
     wave data analysis
   * LALApps: Collection of gravitational wave data analysis codes and
     pipelines utilising the LAL libraries
+
+Package: boinc-app-eah-ligo
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Gravitational wave search on LIGO data
+ The Einstein@Home project features several BOINC projets to search for
+ pulsars and graviational waves these induce. The package embraces all
+ the projects that are fed with their own data from the LIGO consortium
+ and provides the apps ready to contribute.

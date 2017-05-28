@@ -1,0 +1,115 @@
+Index: ligo-lalsuite/Makefile.am
+===================================================================
+--- ligo-lalsuite.orig/Makefile.am
++++ ligo-lalsuite/Makefile.am
+@@ -6,6 +6,9 @@ include $(top_srcdir)/gnuscripts/lalsuit
+ 
+ ACLOCAL_AMFLAGS = -I gnuscripts
+ 
++AM_CXXFLAGS = -I/usr/include/boinc
++AM_CFLAGS = -I/usr/include/boinc
++
+ SUBDIRS = @subdirs@
+ 
+ # Override automake's default rule for rebuilding aclocal.m4, to ensure that
+Index: ligo-lalsuite/gnuscripts/lalsuite_build.m4
+===================================================================
+--- ligo-lalsuite.orig/gnuscripts/lalsuite_build.m4
++++ ligo-lalsuite/gnuscripts/lalsuite_build.m4
+@@ -139,7 +139,7 @@ AC_DEFUN([LALSUITE_ADD_FLAGS],[
+   # - arg 2: compiler flags
+   # - arg 3: linker flags
+   m4_ifval([$1],[m4_ifval([$2],[
+-    pre_AM_CPPFLAGS=
++    pre_AM_CPPFLAGS="-I/usr/include -I/usr/include/boinc/api -I/usr/include/boinc/lib"
+     post_AM_CPPFLAGS=
+     pre_sys_CPPFLAGS=
+     post_AM_$1FLAGS=
+Index: ligo-lalsuite/lal/Makefile.am
+===================================================================
+--- ligo-lalsuite.orig/lal/Makefile.am
++++ ligo-lalsuite/lal/Makefile.am
+@@ -1,5 +1,6 @@
+ BUILT_SOURCES =
+ sysconf_DATA =
++AM_CXXFLAGS=-I/usr/include/boinc -I/usr/include/boinc/api -I/usr/include/boinc/lib
+ MOSTLYCLEANFILES =
+ EXTRA_DIST =
+ include $(top_srcdir)/gnuscripts/lalsuite_library_top.am
+@@ -32,3 +33,5 @@ user_environment = \
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = lal.pc lalsupport.pc
++
++BOINC_CFLAGS=-I/usr/include/boinc/lib -I/usr/include/boinc/api
+Index: ligo-lalsuite/lal/configure.ac
+===================================================================
+--- ligo-lalsuite.orig/lal/configure.ac
++++ ligo-lalsuite/lal/configure.ac
+@@ -314,6 +314,8 @@ AM_CONDITIONAL([QTHREAD],[test x$qthread
+ 
+ # check for boinc --- must happen after all compiler checks are done
+ LALSUITE_CHECK_BOINC
++CFLAGS="${CFLAGS} ${ZLIB_CFLAGS} -I/usr/include/boinc/lib -I/usr/include/boinc/api -I/usr/include -I/usr/include/boinc"
++CXXFLAGS="${CFLAGS} ${ZLIB_CFLAGS} -I/usr/include/boinc/lib -I/usr/include/boinc/api -I/usr/include -I/usr/include/boinc"
+ LALSUITE_END_CHECK_BOINC
+ 
+ # configure SWIG wrapping modules
+Index: ligo-lalsuite/lalpulsar/configure.ac
+===================================================================
+--- ligo-lalsuite.orig/lalpulsar/configure.ac
++++ ligo-lalsuite/lalpulsar/configure.ac
+@@ -78,7 +78,8 @@ LALSUITE_ENABLE_CFITSIO
+ 
+ # boinc
+ LALSUITE_ENABLE_BOINC
+-
++BOINC_CFLAGS="-I/usr/include/boinc/lib -I/usr/include/boinc/api -I/usr/include/boinc"
++AC_SUBST(BOINC_CFLAGS)
+ # enable strict gcc flags
+ LALSUITE_ENABLE_GCC_FLAGS
+ 
+Index: ligo-lalsuite/lalapps/configure.ac
+===================================================================
+--- ligo-lalsuite.orig/lalapps/configure.ac
++++ ligo-lalsuite/lalapps/configure.ac
+@@ -95,6 +95,10 @@ LALSUITE_ENABLE_GCC_FLAGS
+ LALSUITE_ENABLE_NIGHTLY
+ LALAPPS_ENABLE_CONDOR
+ LALSUITE_ENABLE_BOINC
++BOINC_CFLAGS="-I/usr/include/boinc/lib -I/usr/include/boinc/api -I/usr/include/boinc"
++BOINC_LDFLAGS="-L/usr/lib/$(dpkg-architecture -qDEB_BUILD_GNU_TYPE)"
++AC_SUBST(BOINC_CFLAGS)
++AC_SUBST(BOINC_LDFLAGS)
+ LALAPPS_ENABLE_STATIC_BINARIES
+ 
+ LALAPPS_ENABLE_MPI
+@@ -159,9 +163,9 @@ fi
+ LALSUITE_ENABLE_MODULE([MPI])
+ 
+ # link tests using libtool
+-if test "${static_binaries}" = "true"; then
+-  lalsuite_libtool_flags="-all-static"
+-fi
++#if test "${static_binaries}" = "true"; then
++#  lalsuite_libtool_flags="-all-static"
++#fi
+ LALSUITE_USE_LIBTOOL
+ 
+ # checks for programs
+@@ -372,6 +376,7 @@ AM_CONDITIONAL([HAVE_BAMBI_MPI],[${bambi
+ 
+ # check for boinc, and modify compiler for lal library checks
+ LALSUITE_CHECK_BOINC
++LALSUITE_ADD_FLAGS([C],[${BOINC_CFLAGS}])
+ 
+ # check for lal libararies and headers
+ LALSUITE_CHECK_LIB([LAL],[${MIN_LAL_VERSION}],[XLALPerror],[lal/XLALError.h])
+@@ -425,6 +430,7 @@ AM_CPPFLAGS="-DPKG_DATA_DIR='\"\$(pkgdat
+ AM_CPPFLAGS="-I\$(top_builddir)/src/lalapps ${AM_CPPFLAGS}"
+ AM_CPPFLAGS="-I\$(top_srcdir)/src/lalapps ${AM_CPPFLAGS}"
+ AM_CPPFLAGS="-I\$(top_srcdir)/src ${AM_CPPFLAGS}"
++AM_LDFLAGS="-L/usr/lib/`dpkg-architecture -qDEB_BUILD_GNU_TYPE` ${AM_LDFLAGS}"
+ 
+ # force all python modules into the exec dir to prevent mixed C and
+ # pure-python library code from being split across lib and lib64 on
